@@ -9,7 +9,7 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-light bg-light justify-content-center">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{% url 'homepage' %}">
             <img src="https://via.placeholder.com/30" alt="Logo" class="d-inline-block align-top">
             Logo
         </a>
@@ -31,7 +31,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Accedi</button>
                 </form>
-                <p class="my-3">Non sei ancora registrato? <a href="signin/">Registrati qui</a></p>
+                <p class="my-3">Non sei ancora registrato? <a href="{% url 'signin' %}">Registrati qui</a></p>
             </div>
         </div>
     </div>

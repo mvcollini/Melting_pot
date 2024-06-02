@@ -3,7 +3,7 @@ from django.conf import settings
 
 
 # Create your views here.
-def prova(request):
+def homepage(request):
     return render(request, 'homepage.html')
 
 

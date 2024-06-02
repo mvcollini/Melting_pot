@@ -1,8 +1,11 @@
 from django.urls import path
-from.views import prova,home,login,signin
+from.views import homepage,home,login,signin
+
+
 urlpatterns=[
-    path("",prova,name="prova"),
+    path("",homepage,name="homepage"),
     path("login/",login,name="login"),
     path("signin/",signin,name="signin"),
-    path("home/",home, name="home" )
+    path("home/",home, name="home"),
+
 ]
