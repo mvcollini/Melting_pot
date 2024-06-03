@@ -15,19 +15,28 @@
         </a>
     </nav>
 
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <!-- Login Form -->
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2 class="text-center">Registrati</h2>
-                <form>
+                <form method="post" action="{% url 'registra' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Inserisci username">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Inserisci username" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Inserisci password">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Inserisci password" required>
                     </div>
 
                   <!--METTI UNA COSA PER L'IMMAGINE OOPURE METTI DOPO? -->

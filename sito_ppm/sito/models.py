@@ -23,7 +23,7 @@ class Recipe(models.Model):
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
     ingredients = models.TextField()
     instructions = models.TextField()
-    preparationtime = models.CharField(help_text="Total preparation time (e.g., '1:30:00' for 1 hour 30 minutes)",
+    preparationtime = models.CharField(help_text="Totale tempo di preparazione (es: 1 hour 30 minutes)",
                                        max_length=200, blank=True, null=True)
 
     def __str__(self):
