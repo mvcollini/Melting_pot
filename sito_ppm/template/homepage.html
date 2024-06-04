@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic Homepage</title>
+    <title>Homepage</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
@@ -30,17 +30,17 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                     {% if user.is_authenticated %}
-                        <a class="dropdown-item disabled"> Ciao, {{ user.username }} </a>
+                        <a class="dropdown-item disabled"> Ciao {{ user.username }}! </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Il mio Account</a>
+                        <a class="dropdown-item" href="{% url 'profilo' %}">Il mio Account</a>
                         <a class="dropdown-item" href="#"> + Aggiungi ricetta</a>
-                        <a class="dropdown-item" href="#">Esci</a>
+                        <a class="dropdown-item" href="{% url 'esci' %}">Esci</a>
                     {% else %}
-                        <a class="dropdown-item" href="login/">Accedi</a>
+                        <a class="dropdown-item" href="mylogin/">Accedi</a>
                         <a class="dropdown-item" href="signin/">Registrati</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login/">Il mio Account</a>
-                        <a class="dropdown-item" href="login/"> + Aggiungi ricetta</a>
+                        <a class="dropdown-item" href="mylogin/">Il mio Account</a>
+                        <a class="dropdown-item" href="mylogin/"> + Aggiungi ricetta</a>
                     {% endif %}
                 </div>
             </div>

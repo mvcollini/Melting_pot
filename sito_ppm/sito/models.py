@@ -1,9 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.templatetags.static import static
 
 class CustomUser(AbstractUser):
     profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
+
+    def get_profile_picture_url(self):
+        if self.profile_image:
+            return self.profile_image.url
+        return static('images/defaultprofile.jpg')
 
     def __str__(self):
         return self.username
