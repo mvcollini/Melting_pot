@@ -33,7 +33,7 @@
                         <a class="dropdown-item disabled"> Ciao {{ user.username }}! </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'profilo' %}">Il mio Account</a>
-                        <a class="dropdown-item" href="#"> + Aggiungi ricetta</a>
+                        <a class="dropdown-item" href="{% url 'crea' %}"> + Aggiungi ricetta</a>
                         <a class="dropdown-item" href="{% url 'esci' %}">Esci</a>
                     {% else %}
                         <a class="dropdown-item" href="mylogin/">Accedi</a>

@@ -15,19 +15,18 @@
         </a>
     </nav>
 
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+
 
     <!-- signin Form -->
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2 class="text-center">Registrati</h2>
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="my-2" style="color: darkred">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
                 <form method="post" action="{% url 'registra' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
@@ -39,8 +38,12 @@
                         <input type="password" class="form-control" id="password" name="password" placeholder="Inserisci password" required>
                     </div>
                     <div class="form-group">
+                        <label for="password">Ripeti Password</label>
+                        <input type="password" class="form-control" id="password2" name="password2" placeholder="Inserisci nuovamente password" required>
+                    </div>
+                    <div class="form-group">
                         <label for="profile_image">Profile Image:</label>
-                        <input type="file" id="profile_image" name="profile_image"><br>
+                        <input type="file" class="form-control-file" id="profile_image" name="profile_image"><br>
                     </div>
 
                   <!--METTI UNA COSA PER L'IMMAGINE OOPURE METTI DOPO? -->
