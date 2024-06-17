@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Recipe</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light justify-content-center">
+        <a class="navbar-brand" href="{% url 'homepage' %}">
+            <img src="https://via.placeholder.com/30" alt="Logo" class="d-inline-block align-top">
+            Logo
+        </a>
+    </nav>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="my-2" style="color: darkred">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    <div class="container my-5">
+        <h2 class="text-center">Crea una Ricetta</h2>
+        <form method="post" action="{% url 'update_ricetta' recipe.id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+            <div class="form-group">
+                <label for="titolo">Titolo</label>
+                <input type="text" class="form-control" id="titolo" name= "titolo" placeholder= {{recipe.title}}  >
+            </div>
+            <div class="form-group">
+                <label for="foto-ricetta">Foto Ricetta</label>
+                <input type="file" class="form-control-file" id="foto-ricetta" name="foto">
+            </div>
+            <div class="form-group">
+                <label for="tempo-preparazione">Tempo di Preparazione</label>
+                <input type="text" class="form-control" id="tempo-preparazione" name="tempo" placeholder={{ recipe.preparationtime}}>
+            </div>
+            <div class="form-group">
+                <label for="category">Categoria</label>
+                <select class="form-control" id="category" name="category">
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="ingredienti">Ingredienti</label>
+                <textarea class="form-control" id="ingredienti" name="ingredienti" rows="5" placeholder={{recipe.ingredients}} ></textarea>
+            </div>
+            <div class="form-group">
+                <label for="istruzioni">Istruzioni</label>
+                <textarea class="form-control" id="istruzioni" name="istruzioni" rows="8" placeholder={{recipe.instructions}} ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-secondary">Annulla</a>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
