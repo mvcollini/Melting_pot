@@ -200,9 +200,10 @@ def delete_recipe(request, recipe_id):
 
 
 @login_required
-def modifica_ricetta(request, id):
-    recipe = get_object_or_404(Recipe, id=id)
-    return render(request, 'modifica_ricetta.html', {'recipe': recipe})
+def modifica_ricetta(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    categories = Category.objects.all()
+    return render(request, 'modifica_ricetta.html', {'recipe': recipe,'categories': categories })
 
 
 @login_required
@@ -215,37 +216,29 @@ def update_ricetta(request, recipe_id):
         istruzioni = request.POST.get('istruzioni')
         tempo = request.POST.get('tempo')
         categoria = request.POST.get('category')
-
-        if not titolo or not categoria or not ingredienti or not istruzioni or not tempo or not foto:
+        categories = Category.objects.all()
+        if not titolo and not ingredienti and not istruzioni and not tempo and not foto:
             messages.error(request, 'Non ci sono stati cambiamenti')
-            return redirect('modifica_ricetta', {'recipe': recipe})
-        if not titolo:
-            titolo = recipe.title
-        if not ingredienti:
-            ingredienti = recipe.ingredients
-        if not foto:
-            foto = recipe.photo
-        if not istruzioni:
-            istruzioni = recipe.instructions
-        if not tempo:
-            tempo = recipe.preparationtime
+            return redirect('modifica_ricetta', recipe_id=recipe.id)
+        if titolo:
+            recipe.title = titolo
+        if ingredienti:
+            recipe.ingredients = ingredienti
+        if foto:
+            recipe.photo = foto
+        if istruzioni:
+            recipe.instructions = istruzioni
+        if tempo:
+            recipe.preparationtime = tempo
 
         try:
             category = Category.objects.get(id=categoria)
         except Category.DoesNotExist:
             messages.error(request, 'Invalid category.')
-            return redirect('create_recipe')
+            return redirect('modifica_ricetta',recipe_id=recipe.id)
+        recipe.category=category
 
-        recipe = Recipe(
-            title=titolo,
-            photo=foto,
-            preparationtime=tempo,
-            category=category,
-            user=request.user,
-            ingredients=ingredienti,
-            instructions=istruzioni
-        )
         recipe.save()
         return redirect('profilo')
         categories = Category.objects.all()
-        return render(request, 'recipes/recipe_detail.html', {'recipe': recipe})
+        return render(request, 'recipe_detail.html', {'recipe': recipe, 'categories': categories})

@@ -20,8 +20,8 @@ urlpatterns = [
     path('create/', create_recipe, name='create_recipe'),
     path('recipe/<int:id>/', recipe_detail, name='recipe_detail'),
     path('recipe/<int:recipe_id>/delete/', delete_recipe, name='delete_recipe'),
-    path('recipe/<int:id>/modifica', modifica_ricetta, name='modifica_ricetta'),
-    path("modificaricetta/<int:id>/", update_ricetta, name='update_ricetta')
+    path('recipe/<int:recipe_id>/modifica/', modifica_ricetta, name='modifica_ricetta'),
+    path("recipe/<int:recipe_id>/update/", update_ricetta, name='update_ricetta')
 
 ]
 

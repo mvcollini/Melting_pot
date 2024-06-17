@@ -35,8 +35,11 @@
                 </div>
             </div>
     </nav>
+
+
     <div class="container">
         <h1 class="my-4">{{ recipe.title }}</h1>
+        <h6>{{recipe.category}}</h6>
         {% if recipe.photo %}
             <img src=" {{ recipe.photo.url }} " class="img-fluid rounded-start my-3" alt="foto ricetta" style="max-height: 300px; width: auto">
         {% else %}
@@ -44,6 +47,8 @@
         {% endif %}
         <h3>Ingredienti:</h3>
         <p>{{ recipe.ingredients }}</p>
+        <h3>Tempo di preparazione:</h3>
+        <p>{{ recipe.preparationtime }}</p>
         <h3>Istruzioni:</h3>
         <p>{{ recipe.instructions }}</p>
          <div class="row ">
