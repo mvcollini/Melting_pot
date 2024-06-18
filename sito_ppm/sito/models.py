@@ -49,6 +49,10 @@ class Recipe(models.Model):
         return self.title
 
 
+class SavedRecipe(models.Model):
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
 class Follow(models.Model):
     # questo è il seguace
     utente = models.ForeignKey('CustomUser', related_name='following', on_delete=models.CASCADE)
@@ -58,7 +62,3 @@ class Follow(models.Model):
     class Meta:
         unique_together = ('utente', 'followee')
 
-
-class SavedRecipe(models.Model):
-    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)

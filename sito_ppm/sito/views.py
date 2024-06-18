@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser, Recipe, Category
+from .models import CustomUser, Recipe, Category, SavedRecipe
+from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth import logout, authenticate, login
 
@@ -18,11 +19,6 @@ def mylogin(request):
 
 def signin(request):
     return render(request, 'Registrazione.html')
-
-
-# da eliminare
-def home(request):
-    return render(request, 'prova2.html')
 
 
 def profilo(request):
@@ -203,7 +199,7 @@ def delete_recipe(request, recipe_id):
 def modifica_ricetta(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     categories = Category.objects.all()
-    return render(request, 'modifica_ricetta.html', {'recipe': recipe,'categories': categories })
+    return render(request, 'modifica_ricetta.html', {'recipe': recipe, 'categories': categories})
 
 
 @login_required
@@ -235,10 +231,45 @@ def update_ricetta(request, recipe_id):
             category = Category.objects.get(id=categoria)
         except Category.DoesNotExist:
             messages.error(request, 'Invalid category.')
-            return redirect('modifica_ricetta',recipe_id=recipe.id)
-        recipe.category=category
+            return redirect('modifica_ricetta', recipe_id=recipe.id)
+        recipe.category = category
 
         recipe.save()
         return redirect('profilo')
         categories = Category.objects.all()
         return render(request, 'recipe_detail.html', {'recipe': recipe, 'categories': categories})
+
+
+def search(request):
+    query = request.GET.get('q')
+    if query:
+        results = Recipe.objects.filter(title__icontains=query) | Recipe.objects.filter(
+            ingredients__icontains=query) | Recipe.objects.filter(instructions__icontains=query)
+    else:
+        results = Recipe.objects.none()
+
+    context = {
+        'results': results,
+        'query': query,
+    }
+
+    return render(request, 'risultati_ricerca.html', context)
+
+
+@login_required
+def toggle_save_recipe(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    saved_recipe, created = SavedRecipe.objects.get_or_create(user=request.user, recipe=recipe)
+
+    if created:
+        message = 'Recipe saved successfully!'
+        status = 'saved'
+    else:
+        saved_recipe.delete()
+        message = 'Recipe removed successfully!'
+        status = 'removed'
+
+    if request.is_ajax():
+        return JsonResponse({'message': message, 'status': status})
+
+    return redirect('recipe_detail', recipe_id=recipe.id)

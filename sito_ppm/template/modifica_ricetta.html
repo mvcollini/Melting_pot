@@ -22,11 +22,12 @@
     {% endif %}
     <div class="container my-5">
         <h2 class="text-center">Crea una Ricetta</h2>
+        <p class="my-4 text-muted">Inserisci le modifiche o lascia il campo vuoto per mantenerlo invariato.</p>
         <form method="post" action="{% url 'update_ricetta' recipe.id %}" enctype="multipart/form-data">
                     {% csrf_token %}
             <div class="form-group">
                 <label for="titolo">Titolo</label>
-                <input type="text" class="form-control" id="titolo" name= "titolo" placeholder= {{recipe.title}}  >
+                <input type="text" class="form-control" id="titolo" name= "titolo" placeholder = "{{recipe.title}}"  >
             </div>
             <div class="form-group">
                 <label for="foto-ricetta">Foto Ricetta</label>
@@ -34,7 +35,7 @@
             </div>
             <div class="form-group">
                 <label for="tempo-preparazione">Tempo di Preparazione</label>
-                <input type="text" class="form-control" id="tempo-preparazione" name="tempo" placeholder={{ recipe.preparationtime}}>
+                <input type="text" class="form-control" id="tempo-preparazione" name="tempo" placeholder="{{ recipe.preparationtime}}">
             </div>
             <div class="form-group">
                 <label for="category">Categoria</label>
@@ -46,11 +47,11 @@
             </div>
             <div class="form-group">
                 <label for="ingredienti">Ingredienti</label>
-                <textarea class="form-control" id="ingredienti" name="ingredienti" rows="5" placeholder={{recipe.ingredients}} ></textarea>
+                <textarea class="form-control" id="ingredienti" name="ingredienti" rows="5"  >{{recipe.ingredients}}</textarea>
             </div>
             <div class="form-group">
                 <label for="istruzioni">Istruzioni</label>
-                <textarea class="form-control" id="istruzioni" name="istruzioni" rows="8" placeholder={{recipe.instructions}} ></textarea>
+                <textarea class="form-control" id="istruzioni" name="istruzioni" rows="8"  >{{recipe.instructions}}</textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
             <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-secondary">Annulla</a>

@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import (homepage, home, mylogin, signin, registra, esci, login_view, profilo,
+from .views import (homepage, mylogin, signin, registra, esci, login_view, profilo,
                     mysetting, impostazioni, crea, create_recipe, recipe_detail, delete_recipe,
-                    modifica_ricetta, update_ricetta)
+                    modifica_ricetta, update_ricetta,search,toggle_save_recipe)
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -9,7 +9,6 @@ urlpatterns = [
     path("", homepage, name="homepage"),
     path("mylogin/", mylogin, name="mylogin"),
     path("signin/", signin, name="signin"),
-    path("home/", home, name="home"),
     path("registra/", registra, name="registra"),
     path("esci/", esci, name="esci"),
     path("login_view/", login_view, name="login_view"),
@@ -21,7 +20,9 @@ urlpatterns = [
     path('recipe/<int:id>/', recipe_detail, name='recipe_detail'),
     path('recipe/<int:recipe_id>/delete/', delete_recipe, name='delete_recipe'),
     path('recipe/<int:recipe_id>/modifica/', modifica_ricetta, name='modifica_ricetta'),
-    path("recipe/<int:recipe_id>/update/", update_ricetta, name='update_ricetta')
+    path("recipe/<int:recipe_id>/update/", update_ricetta, name='update_ricetta'),
+    path('search/', search, name='search'),
+    path('toggle-save-recipe/<int:recipe_id>/', toggle_save_recipe, name='toggle_save_recipe'),
 
 ]
 

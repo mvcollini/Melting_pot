@@ -40,6 +40,13 @@
     <div class="container">
         <h1 class="my-4">{{ recipe.title }}</h1>
         <h6>{{recipe.category}}</h6>
+        {% if user.is_authenticated %}
+            {% if recipe.user.username != user.username%}
+            <h6 class="text-secondary">{{recipe.user}}</h6>
+            {% endif %}
+        {% else %}
+            <h6>{{recipe.user}}</h6>
+        {% endif %}
         {% if recipe.photo %}
             <img src=" {{ recipe.photo.url }} " class="img-fluid rounded-start my-3" alt="foto ricetta" style="max-height: 300px; width: auto">
         {% else %}
@@ -51,13 +58,27 @@
         <p>{{ recipe.preparationtime }}</p>
         <h3>Istruzioni:</h3>
         <p>{{ recipe.instructions }}</p>
-         <div class="row ">
-             <a href="{% url 'modifica_ricetta' recipe.id %}" class="btn btn-primary my-4 mx-2">Modifica Ricetta</a>
-             <a class="btn btn-danger my-4 mx-2" onclick="confirmDelete();">Elimina Ricetta</a>
+        <div class="row ">
+         {% if user.is_authenticated %}
+            {% if recipe.user.username != user.username%}
+            <button id="save-recipe-button" class="btn btn-light my-4 mx-2" data-recipe-id="{{ recipe.id }}">
+                    <i class="bi bi-bookmark-heart"></i></button>
 
-         <form id="delete-form" action="{% url 'delete_recipe' recipe.id %}" method="post" style="display:none;">
-            {% csrf_token %}
-        </form>
+            <div id="message-container"></div>
+            {% else %}
+                <a href="{% url 'modifica_ricetta' recipe.id %}" class="btn btn-primary my-4 mx-2">Modifica Ricetta</a>
+                <a class="btn btn-danger my-4 mx-2" onclick="confirmDelete();">Elimina Ricetta</a>
+
+                <form id="delete-form" action="{% url 'delete_recipe' recipe.id %}" method="post" style="display:none;">
+                {% csrf_token %}
+                </form>
+            {% endif %}
+         {% else%}
+            <p class="text_danger"> Accedi per salvare la ricetta!</p>
+         {% endif %}
+
+
+
          </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -70,5 +91,31 @@
             }
         }
     </script>
+
+<script>
+document.getElementById('toggle-save-recipe-button').addEventListener('click', function() {
+    const recipeId = this.getAttribute('data-recipe-id');
+    fetch(`/toggle-save-recipe/${recipeId}/`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const messageContainer = document.getElementById('message-container');
+        messageContainer.innerHTML = `<div class="alert alert-info" role="alert">${data.message}</div>`;
+
+        // Update button text based on the new status
+        const button = document.getElementById('toggle-save-recipe-button');
+        if (data.status === 'saved') {
+            button.textContent = 'Remove Recipe';
+        } else {
+            button.textContent = 'Save Recipe';
+        }
+    });
+});
+</script>
+
 </body>
 </html>
