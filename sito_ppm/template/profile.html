@@ -34,7 +34,7 @@
                         <a class="dropdown-item" href="{% url 'profilo' %}">Il mio Account</a>
                         <a class="dropdown-item" href="{% url 'crea' %}"> + Aggiungi ricetta</a>
                         <a class="dropdown-item" href="{% url 'ricette_salvate' %}">Ricette salvate</a>
-                        <a class="dropdown-item" href="{% url 'esci' %}">Ricerca Utenti</a>
+                        <a class="dropdown-item" href="{% url 'ricerca_utente' %}">Ricerca Utenti</a>
                         <a class="dropdown-item" href="{% url 'esci' %}">Esci</a>
                 </div>
             </div>
@@ -42,8 +42,8 @@
 
 
     <div class="container py-5">
-        <div class="row justify-content-between">
-            <button type="button" class="btn btn-primary" style="opacity: 0.7;">Follow</button>
+        <div class="row justify-content-end">
+
             <a class="btn btn-secondary"  href="{% url 'mysetting' %}" role="button" style="opacity: 0.7;">Edit profile</a>
         </div>
         <div class="row justify-content-center">
@@ -64,24 +64,19 @@
         <div class="row">
                 {% for recipe in recipes %}
                 <div class="col-md-4 mb-4">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <div class="row g-0">
-                              <div class="col-md-4">
-                                  {% if recipe.photo %}
-                                    <img src=" {{ recipe.photo.url }} " class="img-fluid rounded-start" alt="foto ricetta" >
-                                  {% else %}
-                                    <img src="{% static 'images/defaultrecipe.jpg' %}" class="img-fluid rounded-start" alt="foto ricetta">
-                                  {% endif %}
-                              </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ recipe.title }}</h5>
-                                    <p class="card-text">{{ recipe.ingredients|slice:":100" }}...</p>
-                                    <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-primary">View Recipe</a>
-                                </div>
+                    <div class="card mb-3" style="max-width: 300px;">
+                            {% if recipe.photo %}
+                            <img src=" {{ recipe.photo.url }} " class=" card-img-top rounded-start" alt="foto ricetta" style="max-height: 250px; overflow-y: hidden" >
+                            {% else %}
+                            <img src="{% static 'images/defaultrecipe.jpg' %}" class="card-img-top rounded-start" alt="foto ricetta" style="max-height: 250px; overflow-y: hidden">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ recipe.title }}</h5>
+                                <p class="card-text">{{ recipe.ingredients|slice:":30" }}...</p>
+                                <p class="card-text"><small class="text-body-secondary">{{recipe.user}}</small></p>
+                                <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-primary">View Recipe</a>
                             </div>
                         </div>
-                    </div>
                 </div>
             {% endfor %}
         </div>

@@ -34,7 +34,7 @@
                         <a class="dropdown-item" href="{% url 'profilo' %}">Il mio Account</a>
                         <a class="dropdown-item" href="{% url 'crea' %}"> + Aggiungi ricetta</a>
                         <a class="dropdown-item" href="{% url 'ricette_salvate' %}">Ricette salvate</a>
-                        <a class="dropdown-item" href="{% url 'esci' %}">Ricerca Utenti</a>
+                        <a class="dropdown-item" href="{% url 'ricerca_utente' %}">Ricerca Utenti</a>
                         <a class="dropdown-item" href="{% url 'esci' %}">Esci</a>
                 </div>
             </div>
@@ -50,7 +50,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card mb-3" style="max-width: 540px;">
                     {% if saved_recipe.recipe.photo %}
-                    <img src="{{ saved_recipe.recipe.photo.url }}" class="card-img-top" alt="{{ saved_recipe.recipe.title }}">
+                    <img src="{{ saved_recipe.recipe.photo.url }}" class="card-img-top" alt="foto ricetta">
                     {% else %}
                     <img src="{% static 'images/defaultrecipe.jpg' %}" class="card-img-top" alt="Default Image">
                     {% endif %}

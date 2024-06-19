@@ -180,7 +180,6 @@ def create_recipe(request):
     return render(request, 'ricette.html', {'categories': categories})
 
 
-
 def recipe_detail(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     return render(request, 'recipe_detail.html', {'recipe': recipe})
@@ -208,7 +207,7 @@ def update_ricetta(request, recipe_id):
     if request.method == 'POST':
         titolo = request.POST.get('titolo')
         ingredienti = request.POST.get('ingredienti')
-        foto = request.POST.get('foto')
+        foto = request.FILES.get('foto')
         istruzioni = request.POST.get('istruzioni')
         tempo = request.POST.get('tempo')
         categoria = request.POST.get('category')
@@ -238,6 +237,20 @@ def update_ricetta(request, recipe_id):
         return redirect('profilo')
         categories = Category.objects.all()
         return render(request, 'recipe_detail.html', {'recipe': recipe, 'categories': categories})
+
+
+def searchuser(request):
+    query = request.GET.get('q2')
+    if query:
+        results = CustomUser.objects.filter(username__icontains=query)
+    else:
+        results = CustomUser.objects.none()
+
+    context = {
+        'results': results,
+        'query': query,
+    }
+    return render(request, 'ricerca_utente.html', context)
 
 
 def search(request):
@@ -274,7 +287,22 @@ def toggle_save_recipe(request, recipe_id):
 
     return redirect('recipe_detail', recipe_id=recipe.id)
 
+
 @login_required
 def ricette_salvate(request):
     saved_recipes = SavedRecipe.objects.filter(user=request.user)
     return render(request, 'ricette_salvate.html', {'saved_recipes': saved_recipes})
+
+
+def ricerca_utente(request):
+    return render(request, 'ricerca_utente.html')
+
+
+def user_profile(request, user_id):
+    recipes = Recipe.objects.filter(user=user_id)
+    user = get_object_or_404(CustomUser, id=user_id)
+    currentuser = request.user
+    context = {'user': user,
+               'recipes': recipes,
+               'currentuser':currentuser}
+    return render(request, 'pagina_utente.html', context)
