@@ -73,9 +73,12 @@
         <div class="row ">
          {% if user.is_authenticated %}
             {% if recipe.user.username != user.username%}
+
                 <button id="toggle-save-recipe-button" class="btn btn-light my-4 mx-2" data-recipe-id="{{ recipe.id }}">
-                        <i class="bi bi-bookmark-heart"></i></button>
-                <div id="message-container"></div>
+                    <i class="bi bi-bookmark-heart"></i>
+                </button>
+                <div class="mt-3" id="message-container"></div>
+
             {% else %}
                 <a href="{% url 'modifica_ricetta' recipe.id %}" class="btn btn-primary my-4 mx-2">Modifica Ricetta</a>
                 <a class="btn btn-danger my-4 mx-2" onclick="confirmDelete();">Elimina Ricetta</a>
@@ -85,7 +88,7 @@
                 </form>
             {% endif %}
          {% else%}
-            <p class="text-danger"> Accedi per salvare la ricetta!</p>
+            <p class="text-danger mx-3"><a class="text-danger" href="{% url 'mylogin' %}">Accedi </a> per salvare la ricetta</p>
          {% endif %}
 
 
@@ -117,13 +120,6 @@ document.getElementById('toggle-save-recipe-button').addEventListener('click', f
         const messageContainer = document.getElementById('message-container');
         messageContainer.innerHTML = `<div class="alert alert-info text-black" role="alert">${data.message}</div>`;
 
-        /* Update button text based on the new status
-        const button = document.getElementById('toggle-save-recipe-button');
-        if (data.status === 'saved') {
-            button.textContent = 'Remove Recipe';
-        } else {
-            button.textContent = 'Save Recipe';
-        }*/
     });
 });
 </script>

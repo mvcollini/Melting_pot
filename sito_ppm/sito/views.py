@@ -180,7 +180,7 @@ def create_recipe(request):
     return render(request, 'ricette.html', {'categories': categories})
 
 
-@login_required
+
 def recipe_detail(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     return render(request, 'recipe_detail.html', {'recipe': recipe})
@@ -266,15 +266,15 @@ def toggle_save_recipe(request, recipe_id):
         status = 'saved'
     else:
         saved_recipe.delete()
-        message = 'Recipe removed successfully!'
+        message = 'Recipe removed'
         status = 'removed'
 
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({'message': message, 'status': status})
 
     return redirect('recipe_detail', recipe_id=recipe.id)
 
-
+@login_required
 def ricette_salvate(request):
     saved_recipes = SavedRecipe.objects.filter(user=request.user)
     return render(request, 'ricette_salvate.html', {'saved_recipes': saved_recipes})
