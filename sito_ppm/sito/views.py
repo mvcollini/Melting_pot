@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser, Recipe, Category, SavedRecipe
+from .models import CustomUser, Recipe, Category, SavedRecipe,Follow
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth import logout, authenticate, login
@@ -295,7 +295,13 @@ def ricette_salvate(request):
 
 
 def ricerca_utente(request):
-    return render(request, 'ricerca_utente.html')
+    users = CustomUser.objects.exclude(id=request.user.id)
+    follows = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)
+    context = {
+        'users': users,
+        'follows': follows
+    }
+    return render(request, 'ricerca_utente.html',context)
 
 
 def user_profile(request, user_id):
@@ -305,4 +311,23 @@ def user_profile(request, user_id):
     context = {'user': user,
                'recipes': recipes,
                'currentuser':currentuser}
-    return render(request, 'pagina_utente.html', context)
+    return render(request, 'ricerca_utente.html', context)
+
+@login_required
+def follow_user(request, user_id):
+    followee = get_object_or_404(CustomUser, id=user_id)
+    follow, created = Follow.objects.get_or_create(utente=request.user, followee=followee)
+    if created:
+        # If the follow object was created, the follow action was successful
+        print(f"User {request.user} followed {followee}")
+    return redirect('ricerca_utente')
+
+@login_required
+def unfollow_user(request, user_id):
+    followee = get_object_or_404(CustomUser, id=user_id)
+    follow = Follow.objects.filter(utente=request.user, followee=followee).first()
+    if follow:
+        follow.delete()
+        # If the follow object was deleted, the unfollow action was successful
+        print(f"User {request.user} unfollowed {followee}")
+    return redirect('pagina_utente')

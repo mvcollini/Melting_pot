@@ -86,7 +86,17 @@
                                     <div class="card-body">
                                         <a class="stretched-link" href="{% url 'user_profile' user.id %}"></a>
                                         <h5 class="card-title"><a href="{% url 'user_profile' user.id %}" style="text-decoration: none; color: black">{{ user.username }} </a></h5>
-                                        <a href="" class="btn btn-primary">Follow</a>
+                                        {% if user.id in follows %}
+                                          <form action="{% url 'unfollow_user' user.id %}" method="post" style="display: inline;">
+                                            {% csrf_token %}
+                                            <button class="btn-primary" type="submit">Unfollow</button>
+                                          </form>
+                                        {% else %}
+                                          <form action="{% url 'follow_user' user.id %}" method="post" style="display: inline;">
+                                            {% csrf_token %}
+                                            <button class="btn-primary" type="submit">Follow</button>
+                                          </form>
+                                        {% endif %}
                                     </div>
                         </div>
                     </div>
