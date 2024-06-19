@@ -273,3 +273,8 @@ def toggle_save_recipe(request, recipe_id):
         return JsonResponse({'message': message, 'status': status})
 
     return redirect('recipe_detail', recipe_id=recipe.id)
+
+
+def ricette_salvate(request):
+    saved_recipes = SavedRecipe.objects.filter(user=request.user)
+    return render(request, 'ricette_salvate.html', {'saved_recipes': saved_recipes})

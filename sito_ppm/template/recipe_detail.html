@@ -13,13 +13,14 @@
             <img src="https://via.placeholder.com/30" alt="Logo" class="d-inline-block align-top">
             Logo
         </a>
+
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="#">Categories</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'search' %}">
+                <input class="form-control mr-sm-2" type="search" name ="q" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
             </form>
             <div class="dropdown ml-2">
@@ -27,11 +28,22 @@
                     <i class="bi bi-person"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    {% if user.is_authenticated %}
                         <a class="dropdown-item disabled"> Ciao {{ user.username }}! </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'profilo' %}">Il mio Account</a>
                         <a class="dropdown-item" href="{% url 'crea' %}"> + Aggiungi ricetta</a>
+                        <a class="dropdown-item" href="{% url 'ricette_salvate' %}">Ricette salvate</a>
+                        <a class="dropdown-item" href="{% url 'esci' %}">Ricerca Utenti</a>
                         <a class="dropdown-item" href="{% url 'esci' %}">Esci</a>
+                </div>
+                    {% else %}
+                        <a class="dropdown-item" href="{% url 'mylogin' %}">Accedi</a>
+                        <a class="dropdown-item" href="{% url 'signin' %}">Registrati</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'mylogin' %}">Il mio Account</a>
+                        <a class="dropdown-item" href="{% url 'mylogin' %}"> + Aggiungi ricetta</a>
+                    {% endif %}
                 </div>
             </div>
     </nav>
@@ -61,10 +73,9 @@
         <div class="row ">
          {% if user.is_authenticated %}
             {% if recipe.user.username != user.username%}
-            <button id="save-recipe-button" class="btn btn-light my-4 mx-2" data-recipe-id="{{ recipe.id }}">
-                    <i class="bi bi-bookmark-heart"></i></button>
-
-            <div id="message-container"></div>
+                <button id="toggle-save-recipe-button" class="btn btn-light my-4 mx-2" data-recipe-id="{{ recipe.id }}">
+                        <i class="bi bi-bookmark-heart"></i></button>
+                <div id="message-container"></div>
             {% else %}
                 <a href="{% url 'modifica_ricetta' recipe.id %}" class="btn btn-primary my-4 mx-2">Modifica Ricetta</a>
                 <a class="btn btn-danger my-4 mx-2" onclick="confirmDelete();">Elimina Ricetta</a>
@@ -74,7 +85,7 @@
                 </form>
             {% endif %}
          {% else%}
-            <p class="text_danger"> Accedi per salvare la ricetta!</p>
+            <p class="text-danger"> Accedi per salvare la ricetta!</p>
          {% endif %}
 
 
@@ -104,15 +115,15 @@ document.getElementById('toggle-save-recipe-button').addEventListener('click', f
     .then(response => response.json())
     .then(data => {
         const messageContainer = document.getElementById('message-container');
-        messageContainer.innerHTML = `<div class="alert alert-info" role="alert">${data.message}</div>`;
+        messageContainer.innerHTML = `<div class="alert alert-info text-black" role="alert">${data.message}</div>`;
 
-        // Update button text based on the new status
+        /* Update button text based on the new status
         const button = document.getElementById('toggle-save-recipe-button');
         if (data.status === 'saved') {
             button.textContent = 'Remove Recipe';
         } else {
             button.textContent = 'Save Recipe';
-        }
+        }*/
     });
 });
 </script>

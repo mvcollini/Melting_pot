@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (homepage, mylogin, signin, registra, esci, login_view, profilo,
                     mysetting, impostazioni, crea, create_recipe, recipe_detail, delete_recipe,
-                    modifica_ricetta, update_ricetta,search,toggle_save_recipe)
+                    modifica_ricetta, update_ricetta, search, toggle_save_recipe, ricette_salvate)
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -23,6 +23,7 @@ urlpatterns = [
     path("recipe/<int:recipe_id>/update/", update_ricetta, name='update_ricetta'),
     path('search/', search, name='search'),
     path('toggle-save-recipe/<int:recipe_id>/', toggle_save_recipe, name='toggle_save_recipe'),
+    path("ricette_salvate/", ricette_salvate, name='ricette_salvate')
 
 ]
 

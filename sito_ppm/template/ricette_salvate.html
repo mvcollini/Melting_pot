@@ -40,52 +40,39 @@
             </div>
     </nav>
 
-
     <div class="container py-5">
-        <div class="row justify-content-between">
-            <button type="button" class="btn btn-primary" style="opacity: 0.7;">Follow</button>
-            <a class="btn btn-secondary"  href="{% url 'mysetting' %}" role="button" style="opacity: 0.7;">Edit profile</a>
+      <div class="row">
+            <h3 class="text-center mb-4">Ricette Salvate</h3>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-md-6 text-center">
-                <div class="card border-white mb-4">
+        <div class="row">
+        {% if saved_recipes %}
+            {% for saved_recipe in saved_recipes %}
+            <div class="col-md-4 mb-4">
+                <div class="card mb-3" style="max-width: 540px;">
+                    {% if saved_recipe.recipe.photo %}
+                    <img src="{{ saved_recipe.recipe.photo.url }}" class="card-img-top" alt="{{ saved_recipe.recipe.title }}">
+                    {% else %}
+                    <img src="{% static 'images/defaultrecipe.jpg' %}" class="card-img-top" alt="Default Image">
+                    {% endif %}
                     <div class="card-body">
-                        <img src=" {{ user.get_profile_picture_url }} " alt="Profile Picture" class="rounded-circle img-fluid mb-3" style="width: 100px; height: 100px;">
-                        <h5 class="card-title">{{ user.username }}</h5>
-                        <p class="card-text">Ricette {{ user.count_recipes }} Follower {{ user.count_followers }} Seguiti {{ user.count_following }} </p>
+                        <h5 class="card-title">{{ saved_recipe.recipe.title }}</h5>
+                        <p class="card-text">{{ saved_recipe.recipe.preparationtime }}</p>
+                        <a href="{% url 'recipe_detail' saved_recipe.recipe.id %}" class="btn btn-primary">View Recipe</a>
                     </div>
                 </div>
             </div>
-        </div>
-        <hr>
-        <div class="row">
-            <h3 class="text-center mb-4">Le mie Ricette</h3>
-        </div>
-        <div class="row">
-                {% for recipe in recipes %}
-                <div class="col-md-4 mb-4">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <div class="row g-0">
-                              <div class="col-md-4">
-                                  {% if recipe.photo %}
-                                    <img src=" {{ recipe.photo.url }} " class="img-fluid rounded-start" alt="foto ricetta" >
-                                  {% else %}
-                                    <img src="{% static 'images/defaultrecipe.jpg' %}" class="img-fluid rounded-start" alt="foto ricetta">
-                                  {% endif %}
-                              </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ recipe.title }}</h5>
-                                    <p class="card-text">{{ recipe.ingredients|slice:":100" }}...</p>
-                                    <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-primary">View Recipe</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             {% endfor %}
-        </div>
+        {% else %}
+            <p>You have no saved recipes.</p>
+        {% endif %}
     </div>
+
+
+
+
+
+    </div>
+
 
 <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -35,7 +35,10 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'profilo' %}">Il mio Account</a>
                         <a class="dropdown-item" href="{% url 'crea' %}"> + Aggiungi ricetta</a>
+                        <a class="dropdown-item" href="{% url 'ricette_salvate' %}">Ricette salvate</a>
+                        <a class="dropdown-item" href="{% url 'esci' %}">Ricerca Utenti</a>
                         <a class="dropdown-item" href="{% url 'esci' %}">Esci</a>
+                </div>
                     {% else %}
                         <a class="dropdown-item" href="{% url 'mylogin' %}">Accedi</a>
                         <a class="dropdown-item" href="{% url 'signin' %}">Registrati</a>
