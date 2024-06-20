@@ -245,10 +245,11 @@ def searchuser(request):
         results = CustomUser.objects.filter(username__icontains=query)
     else:
         results = CustomUser.objects.none()
-
+    followed_user_ids = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)
     context = {
         'results': results,
         'query': query,
+        'followed_user_ids': followed_user_ids,
     }
     return render(request, 'ricerca_utente.html', context)
 
@@ -311,23 +312,34 @@ def user_profile(request, user_id):
     context = {'user': user,
                'recipes': recipes,
                'currentuser':currentuser}
-    return render(request, 'ricerca_utente.html', context)
+    return render(request, 'pagina_utente.html', context)
+
 
 @login_required
 def follow_user(request, user_id):
     followee = get_object_or_404(CustomUser, id=user_id)
     follow, created = Follow.objects.get_or_create(utente=request.user, followee=followee)
-    if created:
-        # If the follow object was created, the follow action was successful
-        print(f"User {request.user} followed {followee}")
+
+    status = 'followed' if created else 'already_followed'
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'status': status, 'user_id': user_id})
+
     return redirect('ricerca_utente')
+
 
 @login_required
 def unfollow_user(request, user_id):
     followee = get_object_or_404(CustomUser, id=user_id)
     follow = Follow.objects.filter(utente=request.user, followee=followee).first()
+
     if follow:
         follow.delete()
-        # If the follow object was deleted, the unfollow action was successful
-        print(f"User {request.user} unfollowed {followee}")
-    return redirect('pagina_utente')
+        status = 'unfollowed'
+    else:
+        status = 'not_following'
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'status': status, 'user_id': user_id})
+
+    return redirect('ricerca_utente')

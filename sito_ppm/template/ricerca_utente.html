@@ -38,7 +38,7 @@
                         <a class="dropdown-item" href="{% url 'ricette_salvate' %}">Ricette salvate</a>
                         <a class="dropdown-item" href="{% url 'ricerca_utente' %}">Ricerca Utenti</a>
                         <a class="dropdown-item" href="{% url 'esci' %}">Esci</a>
-                </div>
+
                     {% else %}
                         <a class="dropdown-item" href="{% url 'mylogin' %}">Accedi</a>
                         <a class="dropdown-item" href="{% url 'signin' %}">Registrati</a>
@@ -69,14 +69,11 @@
             </div>
             <div class="row">
 
+                {% if results %}
 
-
-
-              {% if results %}
-
-                  {% for user in results %}
-                   <div class="col-md-4 mb-4">
-                        <div class="card flex-row mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                      {% for user in results %}
+                           <div class="col-md-4 mb-4">
+                                <div class="card flex-row mb-3" style="width: 100px; height: 100px; object-fit: cover;">
 
                                       {% if user.profile_image %}
                                         <img src=" {{ user.profile_image.url }} " class="card-img img-fluid rounded-start" alt="foto profilo" >
@@ -86,25 +83,20 @@
                                     <div class="card-body">
                                         <a class="stretched-link" href="{% url 'user_profile' user.id %}"></a>
                                         <h5 class="card-title"><a href="{% url 'user_profile' user.id %}" style="text-decoration: none; color: black">{{ user.username }} </a></h5>
-                                        {% if user.id in follows %}
-                                          <form action="{% url 'unfollow_user' user.id %}" method="post" style="display: inline;">
-                                            {% csrf_token %}
-                                            <button class="btn-primary" type="submit">Unfollow</button>
-                                          </form>
+                                        {% if user.id in followed_user_ids %}
+                                            <button class="follow-unfollow-button btn btn-secondary" data-user-id="{{ user.id }}" data-action="unfollow">Unfollow</button>
                                         {% else %}
-                                          <form action="{% url 'follow_user' user.id %}" method="post" style="display: inline;">
-                                            {% csrf_token %}
-                                            <button class="btn-primary" type="submit">Follow</button>
-                                          </form>
+                                            <button class="follow-unfollow-button btn btn-primary" data-user-id="{{ user.id }}" data-action="follow">Follow</button>
                                         {% endif %}
                                     </div>
-                        </div>
-                    </div>
-                  {% endfor %}
+                                </div>
+                            </div>
+                      {% endfor %}
 
-              {% else %}
-                <p class="text-danger">No results found. </p>
-              {% endif %}
+                {% else %}
+                    <p class="text-danger">No results found. </p>
+                {% endif %}
+            </div>
         {% endif %}
     </div>
 
@@ -112,5 +104,45 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+document.querySelectorAll('.follow-unfollow-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const userId = this.getAttribute('data-user-id');
+        const action = this.getAttribute('data-action');
+
+        console.log(`Button clicked. User ID: ${userId}, Action: ${action}`);
+
+        fetch(`/${action}/${userId}/`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response:', data); // Log the response for debugging
+            const button = document.querySelector(`.follow-unfollow-button[data-user-id='${data.user_id}']`);
+
+            if (button) {
+                console.log('Button found:', button);
+                if (data.status === 'followed' || data.status === 'already_followed') {
+                    button.innerText = 'Unfollow';
+                    button.setAttribute('data-action', 'unfollow');
+                    button.classList.remove('btn-primary');
+                    button.classList.add('btn-secondary');
+                } else if (data.status === 'unfollowed' || data.status === 'not_following') {
+                    button.innerText = 'Follow';
+                    button.setAttribute('data-action', 'follow');
+                    button.classList.remove('btn-secondary');
+                    button.classList.add('btn-primary');
+                }
+            } else {
+                console.error('Button not found for user ID:', data.user_id);
+            }
+        })
+        .catch(error => console.error('Error:', error)); // Log any errors
+    });
+});
+</script>
 </body>
 </html>
