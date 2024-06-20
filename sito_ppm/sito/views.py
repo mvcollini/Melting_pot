@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser, Recipe, Category, SavedRecipe,Follow
+from .models import CustomUser, Recipe, Category, SavedRecipe, Follow
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth import logout, authenticate, login
@@ -10,7 +10,11 @@ from django.contrib.auth import logout, authenticate, login
 
 # Create your views here.
 def homepage(request):
-    return render(request, 'homepage.html')
+    last_8_recipes = Recipe.objects.order_by('-id')[:8]
+    context = {
+        'last_8_recipes': last_8_recipes,
+    }
+    return render(request, 'homepage.html', context)
 
 
 def mylogin(request):
@@ -194,6 +198,12 @@ def delete_recipe(request, recipe_id):
     return render(request, 'recipes/recipe_detail.html', {'recipe': recipe})
 
 
+def delete_profile(request):
+    user = request.user
+    user.delete()
+
+    return redirect('homepage')
+
 @login_required
 def modifica_ricetta(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
@@ -303,7 +313,7 @@ def ricerca_utente(request):
         'users': users,
         'follows': follows
     }
-    return render(request, 'ricerca_utente.html',context)
+    return render(request, 'ricerca_utente.html', context)
 
 
 def user_profile(request, user_id):
@@ -312,7 +322,7 @@ def user_profile(request, user_id):
     currentuser = request.user
     context = {'user': user,
                'recipes': recipes,
-               'currentuser':currentuser}
+               'currentuser': currentuser}
     return render(request, 'pagina_utente.html', context)
 
 
@@ -344,3 +354,6 @@ def unfollow_user(request, user_id):
         return JsonResponse({'status': status, 'user_id': user_id})
 
     return redirect('ricerca_utente')
+
+
+
