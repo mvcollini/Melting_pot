@@ -150,7 +150,7 @@ def create_recipe(request):
     if request.method == 'POST':
         titolo = request.POST.get('titolo')
         ingredienti = request.POST.get('ingredienti')
-        foto = request.POST.get('foto')
+        foto = request.FILES.get('foto')
         istruzioni = request.POST.get('istruzioni')
         tempo = request.POST.get('tempo')
         categoria = request.POST.get('category')
@@ -242,7 +242,8 @@ def update_ricetta(request, recipe_id):
 def searchuser(request):
     query = request.GET.get('q2')
     if query:
-        results = CustomUser.objects.filter(username__icontains=query)
+        results = CustomUser.objects.filter(username__icontains=query).exclude(id=request.user.id)
+
     else:
         results = CustomUser.objects.none()
     followed_user_ids = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)

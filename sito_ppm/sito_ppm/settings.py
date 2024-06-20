@@ -28,7 +28,7 @@ DEBUG = True
 
 AUTH_USER_MODEL = 'sito.CustomUser'
 
-ALLOWED_HOSTS = ['cookstagram-7nzs.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
