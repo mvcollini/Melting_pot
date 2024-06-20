@@ -55,7 +55,7 @@
                     <div class="card-body">
                         <img src=" {{ user.get_profile_picture_url }} " alt="Profile Picture" class="rounded-circle img-fluid mb-3" style="width: 100px; height: 100px;">
                         <h5 class="card-title">{{ user.username }}</h5>
-                        <p class="card-text">Ricette {{ user.count_recipes }} Follower {{ user.count_followers }} Seguiti {{ user.count_following }} </p>
+                        <p class="card-text">Ricette {{ user.count_recipes }} <a href=" {% url 'followers' %}" style="color: black; text-decoration: none">Followers</a> {{ user.count_followers }} Seguiti {{ user.count_following }} </p>
                     </div>
                 </div>
             </div>
@@ -89,5 +89,12 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+        function confirmDelete() {
+            if (confirm("Sei sicuro di voler eliminare questo profilo?")) {
+                document.getElementById('delete-form').submit();
+            }
+        }
+    </script>
 </body>
 </html>

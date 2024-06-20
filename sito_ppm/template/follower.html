@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>Profile Page</title>
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="{% url 'homepage' %}">
             <img src="https://via.placeholder.com/30" alt="Logo" class="d-inline-block align-top">
             Logo
         </a>
-
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="#">Categories</a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'search' %}">
-                <input class="form-control mr-sm-2" type="search" name ="q" placeholder="Esplora le Ricette" aria-label="Search" required>
+                <input class="form-control mr-sm-2" type="search" name ="q" placeholder="Esplora le Ricette" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
             </form>
             <div class="dropdown ml-2">
@@ -30,7 +29,6 @@
                     <i class="bi bi-person"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    {% if user.is_authenticated %}
                         <a class="dropdown-item disabled"> Ciao {{ user.username }}! </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'profilo' %}">Il mio Account</a>
@@ -38,77 +36,47 @@
                         <a class="dropdown-item" href="{% url 'ricette_salvate' %}">Ricette salvate</a>
                         <a class="dropdown-item" href="{% url 'ricerca_utente' %}">Ricerca Utenti</a>
                         <a class="dropdown-item" href="{% url 'esci' %}">Esci</a>
-
-                    {% else %}
-                        <a class="dropdown-item" href="{% url 'mylogin' %}">Accedi</a>
-                        <a class="dropdown-item" href="{% url 'signin' %}">Registrati</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'mylogin' %}">Il mio Account</a>
-                        <a class="dropdown-item" href="{% url 'ricerca_utente' %}">Ricerca Utenti</a>
-                        <a class="dropdown-item" href="{% url 'mylogin' %}"> + Aggiungi ricetta</a>
-                    {% endif %}
                 </div>
             </div>
     </nav>
-
-
-
-    <!-- Search Bar -->
-    <div class="container mt-3">
-
-        <div class="row">
-            <h3 class="mx-0">Qui puoi ricercare nuovi cuochi <i class="bi bi-people-fill"></i></h3>
-
-            <form class="form-inline my-2 my-lg-0 mx-5" method="GET" action="{% url 'searchuser' %}">
-                <input class="form-control mr-sm-2" type="search" name ="q2" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
-            </form>
-        </div>
-    </div>
-
-
-    <!-- Card Container -->
     <div class="container mt-4">
-        {% if query %}
             <div class="row">
                     <h4 class="text-center mb-4 text-secondary">Risultati di ricerca per: "{{ query }}"</h4>
             </div>
             <div class="row">
-
-                {% if results %}
-
-                      {% for user in results %}
-                           <div class="col-md-4 mb-4">
+                {%  if follower %}
+                    {% for follow in follower%}
+                            <div class="col-md-4 mb-4">
                                 <div class="card flex-row mb-3" style="width: 100px; height: 100px; object-fit: cover;">
 
                                       {% if user.profile_image %}
-                                        <img src=" {{ user.profile_image.url }} " class="card-img img-fluid rounded-start" alt="foto profilo" >
+                                        <img src=" {{ follow.utente.profile_image.url }} " class="card-img img-fluid rounded-start" alt="foto profilo" >
                                       {% else %}
                                         <img src="{% static 'images/defaultprofile.jpg' %}" class="card-img img-fluid rounded-start" alt="foto profilo">
                                       {% endif %}
                                     <div class="card-body">
-                                        <a class="stretched-link" href="{% url 'user_profile' user.id %}"></a>
-                                        <h5 class="card-title"><a href="{% url 'user_profile' user.id %}" style="text-decoration: none; color: black">{{ user.username }} </a></h5>
-                                        {% if request.user.is_authenticated %}
-                                            {% if user.id in followed_user_ids %}
+                                        <a class="stretched-link" href="{% url 'user_profile' follow.utente.id %}"></a>
+                                        <h5 class="card-title"><a href="{% url 'user_profile' follow.utente.id %}" style="text-decoration: none; color: black">{{ follow.utente.username }} </a></h5>
+                                            {% if follow.utente.id in followed_user_ids %}
                                                 <button class="follow-unfollow-button btn btn-secondary" data-user-id="{{ user.id }}" data-action="unfollow">Unfollow</button>
                                             {% else %}
                                                 <button class="follow-unfollow-button btn btn-primary" data-user-id="{{ user.id }}" data-action="follow">Follow</button>
                                             {% endif %}
-                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
-                      {% endfor %}
-
+                    {% endfor %}
                 {% else %}
                     <p class="text-danger">No results found. </p>
                 {% endif %}
             </div>
-        {% endif %}
     </div>
 
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
+
+
+
+
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

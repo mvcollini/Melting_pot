@@ -42,6 +42,7 @@
                         <a class="dropdown-item" href="{% url 'signin' %}">Registrati</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'mylogin' %}">Il mio Account</a>
+                        <a class="dropdown-item" href="{% url 'ricerca_utente' %}">Ricerca Utenti</a>
                         <a class="dropdown-item" href="{% url 'mylogin' %}"> + Aggiungi ricetta</a>
                     {% endif %}
                 </div>
@@ -100,7 +101,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
         function confirmDelete() {
-            if (confirm("Are you sure you want to delete this recipe?")) {
+            if (confirm("Sei sicuro di voler eliminare questa ricetta?")) {
                 document.getElementById('delete-form').submit();
             }
         }

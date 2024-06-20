@@ -10,9 +10,11 @@ from django.contrib.auth import logout, authenticate, login
 
 # Create your views here.
 def homepage(request):
-    last_8_recipes = Recipe.objects.order_by('-id')[:8]
+    last_4_recipes = Recipe.objects.order_by('-id')[:4]
+    recipe = Recipe.objects.all()
     context = {
-        'last_8_recipes': last_8_recipes,
+        'last_4_recipes': last_4_recipes,
+        'recipes': recipe
     }
     return render(request, 'homepage.html', context)
 
@@ -200,9 +202,12 @@ def delete_recipe(request, recipe_id):
 
 def delete_profile(request):
     user = request.user
-    user.delete()
+    if request.method == 'POST':
+        user.delete()
+        return redirect('homepage')
 
-    return redirect('homepage')
+    return render(request, 'profile.html')
+
 
 @login_required
 def modifica_ricetta(request, recipe_id):
@@ -252,11 +257,17 @@ def update_ricetta(request, recipe_id):
 def searchuser(request):
     query = request.GET.get('q2')
     if query:
-        results = CustomUser.objects.filter(username__icontains=query).exclude(id=request.user.id)
+        if request.user in CustomUser.objects.all():
+            results = CustomUser.objects.filter(username__icontains=query).exclude(id=request.user.id)
+        else:
+            results = CustomUser.objects.filter(username__icontains=query)
 
     else:
         results = CustomUser.objects.none()
-    followed_user_ids = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)
+    if request.user in CustomUser.objects.all():
+        followed_user_ids = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)
+    else:
+        followed_user_ids = None
     context = {
         'results': results,
         'query': query,
@@ -307,8 +318,12 @@ def ricette_salvate(request):
 
 
 def ricerca_utente(request):
-    users = CustomUser.objects.exclude(id=request.user.id)
-    follows = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)
+    if request.user in CustomUser.objects.all():
+        users = CustomUser.objects.exclude(id=request.user.id)
+        follows = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)
+    else:
+        users = CustomUser.objects.all()
+        follows = None
     context = {
         'users': users,
         'follows': follows
@@ -356,4 +371,11 @@ def unfollow_user(request, user_id):
     return redirect('ricerca_utente')
 
 
-
+def followers(request):
+    follower = Follow.objects.filter(followee=request.user)
+    followed_user_ids = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)
+    context = {
+        'follower': follower,
+        'followed_user_ids': followed_user_ids,
+    }
+    return render(request, 'follower.html', context)
