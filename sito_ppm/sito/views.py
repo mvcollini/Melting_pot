@@ -334,8 +334,13 @@ def ricerca_utente(request):
 def user_profile(request, user_id):
     recipes = Recipe.objects.filter(user=user_id)
     user = get_object_or_404(CustomUser, id=user_id)
-    currentuser = request.user
-    followed_user_ids = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)
+
+    if request.user in CustomUser.objects.all():
+        followed_user_ids = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)
+        currentuser = request.user
+    else:
+        followed_user_ids = None
+        currentuser = None
     context = {'user': user,
                'recipes': recipes,
                'currentuser': currentuser,
