@@ -59,11 +59,12 @@
             <div class="col-md-4 mb-4">
                 <div class="card mb-3" style="max-width: 540px;">
                     {% if saved_recipe.recipe.photo %}
-                    <img src="{{ saved_recipe.recipe.photo.url }}" class="card-img-top" alt="foto ricetta">
+                    <img src="{{ saved_recipe.recipe.photo.url }}" class="card-img-top" alt="foto ricetta" style="max-height: 300px; overflow-y: hidden">
                     {% else %}
                     <img src="{% static 'images/defaultrecipe.jpg' %}" class="card-img-top" alt="Default Image">
                     {% endif %}
                     <div class="card-body">
+                        <a href="{% url 'recipe_detail' saved_recipe.recipe.id %}" class="stretched-link"></a>
                         <h5 class="card-title">{{ saved_recipe.recipe.title }}</h5>
                         <p class="card-text">{{ saved_recipe.recipe.preparationtime }}</p>
                         <a href="{% url 'recipe_detail' saved_recipe.recipe.id %}" class="btn btn-primary">View Recipe</a>
