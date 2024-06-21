@@ -65,10 +65,10 @@
         <h6>{{recipe.category}}</h6>
         {% if user.is_authenticated %}
             {% if recipe.user.username != user.username%}
-            <h6 class="text-secondary">{{recipe.user}}</h6>
+        <h6><a class="text-secondary text-decoration-none" href="{% url 'user_profile' recipe.user.id %}">{{recipe.user}}</a></h6>
             {% endif %}
         {% else %}
-            <h6>{{recipe.user}}</h6>
+            <h6><a class="text-secondary text-decoration-none" href="{% url 'user_profile' recipe.user.id %}">{{recipe.user}}</a></h6>
         {% endif %}
         {% if recipe.photo %}
             <img src=" {{ recipe.photo.url }} " class="img-fluid rounded-start my-3" alt="foto ricetta" style="max-height: 300px; width: auto">
