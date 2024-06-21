@@ -16,8 +16,18 @@
             Logo
         </a>
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Categories</a>
+                <li class="nav-item dropdown">
+                  <div class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false" id="CategoryDropdown">
+                    Categorie
+                  </div>
+                  <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="CategoryDropdown">
+                    <li><a class="dropdown-item" href="{% url 'antipasti' %}">Antipasti</a></li>
+                    <li><a class="dropdown-item" href="{% url 'primi' %}">Primi</a></li>
+                    <li><a class="dropdown-item" href="{% url 'secondi' %}">Secondi</a></li>
+                    <li><a class="dropdown-item" href="{% url 'contorni' %}">Contorni</a></li>
+                    <li><a class="dropdown-item" href="{% url 'dolci' %}">Dolci</a></li>
+
+                  </ul>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'search' %}">
@@ -41,7 +51,7 @@
     </nav>
     <div class="container mt-4">
             <div class="row">
-                    <h4 class="text-center mb-4 text-secondary">Risultati di ricerca per: "{{ query }}"</h4>
+                    <h4 class="text-center mb-4 text-secondary">I tuoi follower:</h4>
             </div>
             <div class="row">
                 {%  if follower %}
@@ -49,7 +59,7 @@
                             <div class="col-md-4 mb-4">
                                 <div class="card flex-row mb-3" style="width: 100px; height: 100px; object-fit: cover;">
 
-                                      {% if user.profile_image %}
+                                      {% if follow.utente.profile_image %}
                                         <img src=" {{ follow.utente.profile_image.url }} " class="card-img img-fluid rounded-start" alt="foto profilo" >
                                       {% else %}
                                         <img src="{% static 'images/defaultprofile.jpg' %}" class="card-img img-fluid rounded-start" alt="foto profilo">
@@ -58,9 +68,9 @@
                                         <a class="stretched-link" href="{% url 'user_profile' follow.utente.id %}"></a>
                                         <h5 class="card-title"><a href="{% url 'user_profile' follow.utente.id %}" style="text-decoration: none; color: black">{{ follow.utente.username }} </a></h5>
                                             {% if follow.utente.id in followed_user_ids %}
-                                                <button class="follow-unfollow-button btn btn-secondary" data-user-id="{{ user.id }}" data-action="unfollow">Unfollow</button>
+                                                <button class="follow-unfollow-button btn btn-secondary" data-user-id="{{ follow.utente.id }}" data-action="unfollow">Unfollow</button>
                                             {% else %}
-                                                <button class="follow-unfollow-button btn btn-primary" data-user-id="{{ user.id }}" data-action="follow">Follow</button>
+                                                <button class="follow-unfollow-button btn btn-primary" data-user-id="{{ follow.utente.id }}" data-action="follow">Follow</button>
                                             {% endif %}
                                     </div>
                                 </div>

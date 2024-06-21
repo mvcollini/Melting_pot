@@ -16,8 +16,18 @@
             Logo
         </a>
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Categories</a>
+                <li class="nav-item dropdown">
+                  <div class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false" id="CategoryDropdown">
+                    Categorie
+                  </div>
+                  <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="CategoryDropdown">
+                    <li><a class="dropdown-item" href="{% url 'antipasti' %}">Antipasti</a></li>
+                    <li><a class="dropdown-item" href="{% url 'primi' %}">Primi</a></li>
+                    <li><a class="dropdown-item" href="{% url 'secondi' %}">Secondi</a></li>
+                    <li><a class="dropdown-item" href="{% url 'contorni' %}">Contorni</a></li>
+                    <li><a class="dropdown-item" href="{% url 'dolci' %}">Dolci</a></li>
+
+                  </ul>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'search' %}">
@@ -44,7 +54,7 @@
     <div class="container py-5">
         <div class="row justify-content-between">
             <a class="btn btn-secondary"  href="{% url 'mysetting' %}" role="button" style="opacity: 0.7;">Impostazioni</a>
-            <a class="btn btn-danger"  href="#" role="button" onclick="confirmDelete();">Delete profile</a>
+            <a class="btn btn-danger"  href="#" role="button" onclick="confirmDelete();">Elimina profilo</a>
             <form id="delete-form" action="{% url 'delete_profile'%}" method="post" style="display:none;">
                 {% csrf_token %}
                 </form>
@@ -55,7 +65,7 @@
                     <div class="card-body">
                         <img src=" {{ user.get_profile_picture_url }} " alt="Profile Picture" class="rounded-circle img-fluid mb-3" style="width: 100px; height: 100px;">
                         <h5 class="card-title">{{ user.username }}</h5>
-                        <p class="card-text">Ricette {{ user.count_recipes }} <a href=" {% url 'followers' %}" style="color: black; text-decoration: none">Followers</a> {{ user.count_followers }} Seguiti {{ user.count_following }} </p>
+                        <p class="card-text">Ricette {{ user.count_recipes }} <a href=" {% url 'followers' %}" style="color: black; text-decoration: none">Followers</a> {{ user.count_followers }} <a href=" {% url 'seguiti' %}" style="color: black; text-decoration: none">Seguiti</a> {{ user.count_following }} </p>
                     </div>
                 </div>
             </div>

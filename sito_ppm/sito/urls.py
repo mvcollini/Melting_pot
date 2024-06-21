@@ -3,7 +3,7 @@ from .views import (homepage, mylogin, signin, registra, esci, login_view, profi
                     mysetting, impostazioni, crea, create_recipe, recipe_detail, delete_recipe,
                     modifica_ricetta, update_ricetta, search, toggle_save_recipe, ricette_salvate,
                     ricerca_utente,searchuser, user_profile, follow_user, unfollow_user,
-                    delete_profile,followers)
+                    delete_profile,followers, seguiti,primi,secondi,contorni,dolci,antipasti)
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -33,7 +33,12 @@ urlpatterns = [
     path('unfollow/<int:user_id>/', unfollow_user, name='unfollow_user'),
     path('delete_profile/', delete_profile, name='delete_profile'),
     path('followers/',followers, name='followers'),
-
+    path('seguiti/', seguiti, name='seguiti'),
+    path("primi/", primi, name='primi'),
+    path("secondi/", secondi, name='secondi'),
+    path("antipasti/", antipasti, name='antipasti'),
+    path("dolci/", dolci, name='dolci'),
+    path("contorni/", contorni, name='contorni'),
 ]
 
 if settings.DEBUG:

@@ -16,8 +16,18 @@
             Logo
         </a>
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Categories</a>
+                <li class="nav-item dropdown">
+                  <div class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false" id="CategoryDropdown">
+                    Categorie
+                  </div>
+                  <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="CategoryDropdown">
+                    <li><a class="dropdown-item" href="{% url 'antipasti' %}">Antipasti</a></li>
+                    <li><a class="dropdown-item" href="{% url 'primi' %}">Primi</a></li>
+                    <li><a class="dropdown-item" href="{% url 'secondi' %}">Secondi</a></li>
+                    <li><a class="dropdown-item" href="{% url 'contorni' %}">Contorni</a></li>
+                    <li><a class="dropdown-item" href="{% url 'dolci' %}">Dolci</a></li>
+
+                  </ul>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'search' %}">

@@ -17,12 +17,22 @@
         </a>
 
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Categories</a>
+                <li class="nav-item dropdown">
+                  <div class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false" id="CategoryDropdown">
+                    Categorie
+                  </div>
+                  <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="CategoryDropdown">
+                    <li><a class="dropdown-item" href="{% url 'antipasti' %}">Antipasti</a></li>
+                    <li><a class="dropdown-item" href="{% url 'primi' %}">Primi</a></li>
+                    <li><a class="dropdown-item" href="{% url 'secondi' %}">Secondi</a></li>
+                    <li><a class="dropdown-item" href="{% url 'contorni' %}">Contorni</a></li>
+                    <li><a class="dropdown-item" href="{% url 'dolci' %}">Dolci</a></li>
+
+                  </ul>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'search' %}">
-                <input class="form-control mr-sm-2" type="search" name ="q" placeholder="Esplora le Ricette" aria-label="Search" required>
+                <input class="form-control mr-sm-2" type="search" name ="q" placeholder="Esplora le Ricette" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
             </form>
             <div class="dropdown ml-2">
@@ -102,7 +112,7 @@
                       {% endfor %}
 
                 {% else %}
-                    <p class="text-danger">No results found. </p>
+                    <p class="text-danger">Non ci sono risultati. </p>
                 {% endif %}
             </div>
         {% endif %}

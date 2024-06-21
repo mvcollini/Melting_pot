@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>{{ recipe.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body>
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="{% url 'homepage' %}">
             <img src="https://via.placeholder.com/30" alt="Logo" class="d-inline-block align-top">
@@ -30,7 +32,7 @@
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'search' %}">
-                <input class="form-control mr-sm-2" type="search" name ="q" placeholder="Esplora le Ricette" aria-label="Search">
+                <input class="form-control mr-sm-2" type="search" name ="q" placeholder="Esplora le Ricette" aria-label="Search" required>
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
             </form>
             <div class="dropdown ml-2">
@@ -46,7 +48,7 @@
                         <a class="dropdown-item" href="{% url 'ricette_salvate' %}">Ricette salvate</a>
                         <a class="dropdown-item" href="{% url 'ricerca_utente' %}">Ricerca Utenti</a>
                         <a class="dropdown-item" href="{% url 'esci' %}">Esci</a>
-                </div>
+
                     {% else %}
                         <a class="dropdown-item" href="{% url 'mylogin' %}">Accedi</a>
                         <a class="dropdown-item" href="{% url 'signin' %}">Registrati</a>
@@ -60,80 +62,43 @@
     </nav>
 
 
-    <div class="container">
-        <h1 class="my-4">{{ recipe.title }}</h1>
-        <h6>{{recipe.category}}</h6>
-        {% if user.is_authenticated %}
-            {% if recipe.user.username != user.username%}
-            <h6 class="text-secondary">{{recipe.user}}</h6>
-            {% endif %}
-        {% else %}
-            <h6>{{recipe.user}}</h6>
-        {% endif %}
-        {% if recipe.photo %}
-            <img src=" {{ recipe.photo.url }} " class="img-fluid rounded-start my-3" alt="foto ricetta" style="max-height: 300px; width: auto">
-        {% else %}
-            <img src="{% static 'images/defaultrecipe.jpg' %}" class="img-fluid rounded-start my-3" alt="foto ricetta">
-        {% endif %}
-        <h3>Ingredienti:</h3>
-        <p>{{ recipe.ingredients }}</p>
-        <h3>Tempo di preparazione:</h3>
-        <p>{{ recipe.preparationtime }}</p>
-        <h3>Istruzioni:</h3>
-        <p>{{ recipe.instructions }}</p>
-        <div class="row ">
-         {% if user.is_authenticated %}
-            {% if recipe.user.username != user.username%}
+    <div class="container mt-3">
 
-                <button id="toggle-save-recipe-button" class="btn btn-light my-4 mx-2" data-recipe-id="{{ recipe.id }}">
-                    <i class="bi bi-bookmark-heart"></i>
-                </button>
-                <div class="mt-3" id="message-container"></div>
+        <div class="row">
+            <h1 class="mx-0">Primi</h1>
 
-            {% else %}
-                <a href="{% url 'modifica_ricetta' recipe.id %}" class="btn btn-primary my-4 mx-2">Modifica Ricetta</a>
-                <a class="btn btn-danger my-4 mx-2" onclick="confirmDelete();">Elimina Ricetta</a>
-
-                <form id="delete-form" action="{% url 'delete_recipe' recipe.id %}" method="post" style="display:none;">
-                {% csrf_token %}
-                </form>
-            {% endif %}
-         {% else%}
-            <p class="text-danger mx-3"><a class="text-danger" href="{% url 'mylogin' %}">Accedi </a> per salvare la ricetta</p>
-         {% endif %}
-
-
-
-         </div>
+        </div>
     </div>
+
+    <div class="container py-5">
+        <div class="row">
+            {% if recipes %}
+                    {% for recipe in recipes %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card mb-3" style="max-width: 300px;">
+                                {% if recipe.photo %}
+                                <img src=" {{ recipe.photo.url }} " class=" card-img-top rounded-start" alt="foto ricetta" style="max-height: 250px; overflow-y: hidden" >
+                                {% else %}
+                                <img src="{% static 'images/defaultrecipe.jpg' %}" class="card-img-top rounded-start" alt="foto ricetta" style="max-height: 250px; overflow-y: hidden">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ recipe.title }}</h5>
+                                    <p class="card-text">{{ recipe.ingredients|slice:":30" }}...</p>
+                                    <p class="card-text"><small class="text-body-secondary">{{recipe.user}}</small></p>
+                                    <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-primary">View Recipe</a>
+                                </div>
+                            </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-danger">Non ci sono ancora ricette in questa categoria. </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-        function confirmDelete() {
-            if (confirm("Sei sicuro di voler eliminare questa ricetta?")) {
-                document.getElementById('delete-form').submit();
-            }
-        }
-    </script>
-
-<script>
-document.getElementById('toggle-save-recipe-button').addEventListener('click', function() {
-    const recipeId = this.getAttribute('data-recipe-id');
-    fetch(`/toggle-save-recipe/${recipeId}/`, {
-        method: 'GET',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        const messageContainer = document.getElementById('message-container');
-        messageContainer.innerHTML = `<div class="alert alert-info text-black" role="alert">${data.message}</div>`;
-
-    });
-});
-</script>
-
 </body>
 </html>

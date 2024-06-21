@@ -335,9 +335,11 @@ def user_profile(request, user_id):
     recipes = Recipe.objects.filter(user=user_id)
     user = get_object_or_404(CustomUser, id=user_id)
     currentuser = request.user
+    followed_user_ids = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)
     context = {'user': user,
                'recipes': recipes,
-               'currentuser': currentuser}
+               'currentuser': currentuser,
+               'followed_user_ids': followed_user_ids}
     return render(request, 'pagina_utente.html', context)
 
 
@@ -379,3 +381,58 @@ def followers(request):
         'followed_user_ids': followed_user_ids,
     }
     return render(request, 'follower.html', context)
+
+
+def seguiti(request):
+    seguito = Follow.objects.filter(utente=request.user)
+    followed_user_ids = Follow.objects.filter(utente=request.user).values_list('followee_id', flat=True)
+    context = {
+        'seguito': seguito,
+        'followed_user_ids': followed_user_ids,
+    }
+    return render(request, 'seguiti.html', context)
+
+
+def primi(request):
+    category = Category.objects.get(name='Primi')
+    recipes = Recipe.objects.filter(category=category)
+
+    context = {
+        'recipes': recipes
+    }
+    return render(request, 'primi.html', context)
+
+def secondi(request):
+    category = Category.objects.get(name='Secondi')
+    recipes = Recipe.objects.filter(category=category)
+
+    context = {
+        'recipes': recipes
+    }
+    return render(request, 'secondi.html', context)
+
+def antipasti(request):
+    category = Category.objects.get(name='Antipasti')
+    recipes = Recipe.objects.filter(category=category)
+
+    context = {
+        'recipes': recipes
+    }
+    return render(request, 'antipasti.html', context)
+def contorni(request):
+    category = Category.objects.get(name='Contorni')
+    recipes = Recipe.objects.filter(category=category)
+
+    context = {
+        'recipes': recipes
+    }
+    return render(request, 'contorni.html', context)
+
+def dolci(request):
+    category = Category.objects.get(name='Dolci')
+    recipes = Recipe.objects.filter(category=category)
+
+    context = {
+        'recipes': recipes
+    }
+    return render(request, 'dolci.html', context)
