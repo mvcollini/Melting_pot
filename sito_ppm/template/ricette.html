@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,9 +10,8 @@
 </head>
 <body>
     <nav class="navbar navbar-light bg-light justify-content-center">
-        <a class="navbar-brand" href="{% url 'homepage' %}">
-            <img src="https://via.placeholder.com/30" alt="Logo" class="d-inline-block align-top">
-            Logo
+       <a class="navbar-brand" href="{% url 'homepage' %}">
+            <img src="{% static 'images/Logo11.png' %}" alt="Logo" class="d-inline-block align-top" style="width: 120px">
         </a>
     </nav>
 

@@ -9,9 +9,8 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'homepage' %}">
-            <img src="https://via.placeholder.com/30" alt="Logo" class="d-inline-block align-top">
-            Logo
+         <a class="navbar-brand" href="{% url 'homepage' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="d-inline-block align-top" style="width: 50px">
         </a>
 
             <ul class="navbar-nav mr-auto">
@@ -76,11 +75,11 @@
             <img src="{% static 'images/defaultrecipe.jpg' %}" class="img-fluid rounded-start my-3" alt="foto ricetta">
         {% endif %}
         <h3>Ingredienti:</h3>
-        <p>{{ recipe.ingredients }}</p>
+        <p>{{ recipe.ingredients|linebreaksbr }}</p>
         <h3>Tempo di preparazione:</h3>
         <p>{{ recipe.preparationtime }}</p>
         <h3>Istruzioni:</h3>
-        <p>{{ recipe.instructions }}</p>
+        <p>{{ recipe.instructions|linebreaksbr }}</p>
         <div class="row ">
          {% if user.is_authenticated %}
             {% if recipe.user.username != user.username%}

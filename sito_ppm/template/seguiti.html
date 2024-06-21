@@ -11,9 +11,8 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'homepage' %}">
-            <img src="https://via.placeholder.com/30" alt="Logo" class="d-inline-block align-top">
-            Logo
+         <a class="navbar-brand" href="{% url 'homepage' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="d-inline-block align-top" style="width: 50px">
         </a>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
