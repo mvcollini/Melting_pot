@@ -280,7 +280,7 @@ def search(request):
     query = request.GET.get('q')
     if query:
         results = Recipe.objects.filter(title__icontains=query) | Recipe.objects.filter(
-            ingredients__icontains=query) | Recipe.objects.filter(instructions__icontains=query)
+            ingredients__icontains=query)
     else:
         results = Recipe.objects.none()
 
